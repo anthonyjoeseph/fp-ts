@@ -1,10 +1,5 @@
 /**
- *
- * A 'struct' is a heterogeneous `ReadonlyRecord`, often an `interface`.
- * Many of these functions have a `Record._WithIndex` counterpart.
- * e.g. struct.mapS <-> Record.mapWithIndex
- *
- * @since 3.0.0
+ * @since 2.11.0
  */
  import { URIS3, Kind3, URIS2, Kind2, URIS, Kind, URIS4, Kind4, HKT } from './HKT'
  import * as R from './ReadonlyRecord'
@@ -95,22 +90,21 @@ import { identity, pipe } from './function'
   *
   * @since 3.0.0
   */
- export const omit = <K extends string>(ks: Array<K>) => <
-   V,
-   A extends Record<K, V>
- >(
-   x: Partial<A>,
- ): Omit<A, K> => {
-   const y = { ...x }
- 
-   /* eslint-disable */
-   for (const k of ks) {
-     delete y[k]
-   }
-   /* eslint-enable */
- 
-   return y as Omit<A, K>
- }
+export const omit = <K extends string>(ks: Array<K>) => <A extends { [key in K]: unknown }>(
+   x: A,
+): Omit<A, K> => {
+  const y = { ...x }
+
+  /* eslint-disable */
+  for (const k of ks) {
+    if (k in y) {
+      delete (y as any)[k]
+    }
+  }
+  /* eslint-enable */
+
+  return y as Pick<A, Exclude<keyof A, K>>
+}
  
  /**
   * Refines a struct based on some of its properties
@@ -219,7 +213,7 @@ const isOption = (a: unknown): a is Option<unknown> => (
   * @since 3.0.0
   */
 export const compactS = <A>(r: A): {
-  [K in keyof A as A[K] extends Option<unknown> ? K : never]?:
+  [K in keyof A as A[K] extends Option<infer B> ? B extends never ? never : K : never]?:
     A[K] extends Option<infer B> ? B : never
 } & {
   [K in keyof A as A[K] extends Option<unknown> ? never : K]: A[K]
