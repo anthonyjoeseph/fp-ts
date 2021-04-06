@@ -1115,6 +1115,16 @@ export const apS =
   /*#__PURE__*/
   apS_(Apply)
 
+const ApplySpecial: Apply2<URI> = {
+  map,
+  ap: <E2, A>(
+    fa: Either<E2, A>
+  ) => <E1, B>(
+    fab: Either<E1, (a: A) => B>
+  ): Either<E1 | E2, B> =>
+    (isLeft(fab) ? fab : isLeft(fa) ? fa : right(fab.right(fa.right)))
+}
+
 /**
  * Less strict version of [`apS`](#apS).
  *
@@ -1124,6 +1134,40 @@ export const apSW: <A, N extends string, E2, B>(
   name: Exclude<N, keyof A>,
   fb: Either<E2, B>
 ) => <E1>(fa: Either<E1, A>) => Either<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apS as any
+
+export const ParseDo: Either<{}, {}> =
+  /*#__PURE__*/
+  of(_.emptyRecord)
+
+
+// useful for a more nuanced parsing step
+// assembling nodes by id (game-ts), parsing a form object,
+// package.json no overlap devdependencies vs dependencies
+export const parseApS = <
+  A,
+  N extends string,
+  E2,
+  B
+>(
+  name: Exclude<N, keyof A>,
+  fb: Either<E2, B>
+) => <E1>(
+  fa: Either<E1, A>
+): Either<
+  { [K in keyof E1 | N]?: K extends keyof E1 ? E1[K] : E2 }, 
+  { [K in keyof A | N]: K extends keyof A ? A[K] : B }
+> => 
+  pipe(
+    fa,
+    map((a) => (b: B) => Object.assign({}, a, { [name]: b }) as any),
+    ap(fb)
+  )
+
+const a = pipe(
+  ParseDo,
+  parseApS('a', right<number, string>(22)),
+  parseApS('b', left<number, boolean>(22)),
+)
 
 // -------------------------------------------------------------------------------------
 // sequence T

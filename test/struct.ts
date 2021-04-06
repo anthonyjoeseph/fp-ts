@@ -5,11 +5,47 @@ import * as _ from '../src/Struct'
 import * as S from '../src/string'
 import * as U from './util'
 
+import * as I from '../src/Identity'
+import * as RA from '../src/ReadonlyArray'
+
+import { apS } from '../src/Apply'
+
+interface Input {
+  readonly a: string | number
+  readonly b: number
+  readonly c: boolean
+}
+
+const a = [{ a: 3 }]
+const b = pipe(
+  a,
+  RA.map(I.apS('b', 33))
+)
+const c = pipe({ a: 1 }, apS(I.Apply)('a', '22'))
+
+export const transformationIdentity = (i: Input) =>
+  pipe(
+    i,
+    I.apS('bb', i.b), // <= map keys
+    I.apS('a', String(i.a)), // <= map values
+    I.bind('d', ({ a }) => new Date(i.b + a)) // <= insert keys (I can possibly read from previous values using `bind`)
+  )
+
 const sp = (s: string): s is 'a' => s === 'a'
 const np = (n: number): n is 1 => n === 1
 
 describe('struct', () => {
   describe('pipeables', () => {
+    it('Do', () => {
+      const a = pipe(
+        3,
+        _.bindTo('a'), // alternately, pipe(S.Do, S.let('a', 3), ...)
+        _.let('b', false),
+        _.bind('c', ({a}) => a.toString()),
+      )
+      const b = pipe({ a: '3' }, _.set('a', 33))
+    })
+
     it('evolve', () => {
       U.deepStrictEqual(
         pipe(
@@ -99,8 +135,8 @@ describe('struct', () => {
         pipe(
           { a: 1, b: 'b', c: 'abc' },
           _.traverseS(S.Ord)(O.Apply)({
-            a: (n) => (n <= 2 ? O.some(n.toString()) : O.none),
-            b: (b) => (b.length <= 2 ? O.some(b.length) : O.none)
+            a: (n: number) => (n <= 2 ? O.some(n.toString()) : O.none),
+            b: (b: string) => (b.length <= 2 ? O.some(b.length) : O.none)
           })
         ),
         O.some({ a: '1', b: 1, c: 'abc' })
