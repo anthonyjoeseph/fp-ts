@@ -93,50 +93,29 @@ export const renameAt = <
     K extends keyof Obj2 ? Obj2[K] : Obj2[OldKey]
 } => ({ [to]: val, ...rest }) as any
 
-export function mapAtE<F extends URIS4>(F: Functor4<F>): {
-  <S, R, E, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind4<F, S, R, E, B>):
-    (a: Kind4<F, S, R, E, A>) => Kind4<F, S, R, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>):
-    (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-}
-export function mapAtE<F extends URIS3>(F: Functor3<F>): {
-  <R, E, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind3<F, R, E, B>):
-    (a: Kind3<F, R, E, A>) => Kind3<F, R, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>):
-    (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-}
-export function mapAtE<F extends URIS3, E>(F: Functor3C<F, E>): {
-  <R, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind3<F, R, E, B>):
-    (a: Kind3<F, R, E, A>) => Kind3<F, R, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>):
-    (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-}
-export function mapAtE<F extends URIS2>(F: Functor2<F>): {
-  <E, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind2<F, E, B>):
-    (a: Kind2<F, E, A>) => Kind2<F, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>):
-    (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-}
-export function mapAtE<F extends URIS2, E>(F: Functor2C<F, E>): {
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind2<F, E, B>):
-    (a: Kind2<F, E, A>) => Kind2<F, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>):
-    (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-}
-export function mapAtE<F extends URIS>(F: Functor1<F>): {
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind<F, B>): 
-    (a: Kind<F, A>) => Kind<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>):
-   (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
-}
-export function mapAtE<F>(F: Functor<F>): 
-  <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>) => 
-  (a: HKT<F, A>) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }> {
-  return <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>) => 
-    (a: HKT<F, A>): HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }> => {
-      return F.map(a, ({[prop]: input, ...rest }) => ({ [prop]: f(input), ...rest}) as any)
-    }
-}
+const mapAtE: {
+  <F extends URIS4>(F: Functor4<F>):
+    <S, R, E, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind4<F, S, R, E, B>) =>
+      (a: A) => Kind4<F, S, R, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+  <F extends URIS3>(F: Functor3<F>):
+    <R, E, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind3<F, R, E, B>) =>
+      (a: A) => Kind3<F, R, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+  <F extends URIS3, E>(F: Functor3C<F, E>):
+    <R, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind3<F, R, E, B>) =>
+      (a: A) => Kind3<F, R, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+  <F extends URIS2>(F: Functor2<F>):
+    <E, A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind2<F, E, B>) =>
+      (a: A) => Kind2<F, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+  <F extends URIS2, E>(F: Functor2C<F, E>):
+    <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind2<F, E, B>) =>
+      (a: Kind2<F, E, A>) => Kind2<F, E, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+  <F extends URIS>(F: Functor1<F>): <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => Kind<F, B>) => 
+    (a: A) => Kind<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+  <F>(F: Functor<F>): <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>) =>
+    (a: A) => HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }>
+} = <F>(F: Functor<F>) => <A, P extends keyof A, B>(prop: P, f: (ap: A[P]) => HKT<F, B>) => 
+  ({ [prop]: input, ...rest }: A): HKT<F, { readonly [K in keyof A]: K extends P ? B : A[K] }> => 
+  F.map(f(input), (output) => ({ [prop]: output, ...rest }) as { readonly [K in keyof A]: K extends P ? B : A[K] })
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -183,7 +162,7 @@ export const mapAt: <
   readonly [K in keyof Obj1]: K extends Key ? ValOut : Obj1[K] 
 } : {
   readonly [K in keyof Obj2]: K extends Key ? ValOut : Obj2[K] 
-} = mapAtE(IDFunctor)
+} = mapAtE(IDFunctor) as any
 
 export const modifyAt: <
   Obj1,
