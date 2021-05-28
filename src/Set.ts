@@ -100,7 +100,9 @@ export function filter<A>(predicate: Predicate<A>): (set: Set<A>) => Set<A> {
 /**
  * @since 2.0.0
  */
-export function partition<A, B extends A>(refinement: Refinement<A, B>): (set: Set<A>) => Separated<Set<A>, Set<B>>
+export function partition<A, B extends A>(
+  refinement: Refinement<A, B>
+): (set: Set<A>) => Separated<Set<Exclude<A, B>>, Set<B>>
 export function partition<A>(predicate: Predicate<A>): <B extends A>(set: Set<B>) => Separated<Set<B>, Set<B>>
 export function partition<A>(predicate: Predicate<A>): (set: Set<A>) => Separated<Set<A>, Set<A>>
 export function partition<A>(predicate: Predicate<A>): (set: Set<A>) => Separated<Set<A>, Set<A>> {

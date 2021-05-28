@@ -139,7 +139,7 @@ export function filter<A>(predicate: Predicate<A>): (set: ReadonlySet<A>) => Rea
  */
 export function partition<A, B extends A>(
   refinement: Refinement<A, B>
-): (set: ReadonlySet<A>) => Separated<ReadonlySet<A>, ReadonlySet<B>>
+): (set: ReadonlySet<A>) => Separated<ReadonlySet<Exclude<A, B>>, ReadonlySet<B>>
 export function partition<A>(
   predicate: Predicate<A>
 ): <B extends A>(set: ReadonlySet<B>) => Separated<ReadonlySet<B>, ReadonlySet<B>>

@@ -97,7 +97,7 @@ pipe(
 pipe(prsns, _.partition(isString))
 // $ExpectType Separated<ReadonlyMap<string, number>, ReadonlyMap<string, number>>
 pipe(prns, _.partition(predicate))
-// $ExpectType Separated<ReadonlyMap<string, string | number>, ReadonlyMap<string, number>>
+// $ExpectType Separated<ReadonlyMap<string, string>, ReadonlyMap<string, number>>
 pipe(prsns, _.partition(isNumber))
 // $ExpectType Separated<ReadonlyMap<string, number>, ReadonlyMap<string, number>>
 pipe(
@@ -137,5 +137,5 @@ pipe(
 // $ExpectType Either<ReadonlyMap<string, number>, ReadonlyMap<string, number>>
 pipe(
   prns,
-  E.fromPredicate(_.isEmpty, (as) => as)
+  E.fromPredicate(_.isEmpty, (as: ReadonlyMap<string, number>) => as)
 )

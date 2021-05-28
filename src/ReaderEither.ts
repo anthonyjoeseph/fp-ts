@@ -55,6 +55,7 @@ import * as R from './Reader'
 import { ReadonlyNonEmptyArray } from './ReadonlyNonEmptyArray'
 import { Refinement } from './Refinement'
 import { Semigroup } from './Semigroup'
+import { Separated } from './Separated'
 
 import Reader = R.Reader
 import Either = E.Either
@@ -512,7 +513,8 @@ export function getFilterable<E>(M: Monoid<E>): Filterable3C<URI, E> {
     separate: C.separate,
     filter: <R, A>(fa: ReaderEither<R, E, A>, predicate: Predicate<A>) => pipe(fa, filter(predicate)),
     filterMap: (fa, f) => pipe(fa, filterMap(f)),
-    partition: <R, A>(fa: ReaderEither<R, E, A>, predicate: Predicate<A>) => pipe(fa, partition(predicate)),
+    partition: <R, A>(fa: ReaderEither<R, E, A>, predicate: Predicate<A>) =>
+      pipe(fa, partition(predicate)) as Separated<ReaderEither<R, E, never>, ReaderEither<R, E, A>>,
     partitionMap: (fa, f) => pipe(fa, partitionMap(f))
   }
 }
@@ -839,7 +841,9 @@ export const chainEitherKW: <E2, A, B>(
  * @since 2.0.0
  */
 export const fromPredicate: {
-  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <R>(a: A) => ReaderEither<R, E, B>
+  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <R>(
+    a: A
+  ) => ReaderEither<R, E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R, B extends A>(b: B) => ReaderEither<R, E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R>(a: A) => ReaderEither<R, E, A>
 } =
@@ -851,7 +855,7 @@ export const fromPredicate: {
  * @since 2.0.0
  */
 export const filterOrElse: {
-  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <R>(
+  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <R>(
     ma: ReaderEither<R, E, A>
   ) => ReaderEither<R, E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R, B extends A>(
@@ -869,7 +873,7 @@ export const filterOrElse: {
  * @since 2.9.0
  */
 export const filterOrElseW: {
-  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: A) => E2): <R, E1>(
+  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E2): <R, E1>(
     ma: ReaderEither<R, E1, A>
   ) => ReaderEither<R, E1 | E2, B>
   <A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2): <R, E1, B extends A>(

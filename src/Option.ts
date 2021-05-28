@@ -176,7 +176,7 @@ const _filterMap: Filterable1<URI>['filterMap'] = (fa, f) => pipe(fa, filterMap(
 const _extend: Extend1<URI>['extend'] = (wa, f) => pipe(wa, extend(f))
 /* istanbul ignore next */
 const _partition: Filterable1<URI>['partition'] = <A>(fa: Option<A>, predicate: Predicate<A>) =>
-  pipe(fa, partition(predicate))
+  pipe(fa, partition(predicate)) as Separated<Option<never>, Option<A>>
 /* istanbul ignore next */
 const _partitionMap: Filterable1<URI>['partitionMap'] = (fa, f) => pipe(fa, partitionMap(f))
 
@@ -561,10 +561,11 @@ export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: Option<A>) => Opt
  * @since 2.0.0
  */
 export const partition: {
-  <A, B extends A>(refinement: Refinement<A, B>): (fa: Option<A>) => Separated<Option<A>, Option<B>>
+  <A, B extends A>(refinement: Refinement<A, B>): (fa: Option<A>) => Separated<Option<Exclude<A, B>>, Option<B>>
   <A>(predicate: Predicate<A>): <B extends A>(fb: Option<B>) => Separated<Option<B>, Option<B>>
   <A>(predicate: Predicate<A>): (fa: Option<A>) => Separated<Option<A>, Option<A>>
-} = <A>(predicate: Predicate<A>) => (fa: Option<A>) => separated(_filter(fa, not(predicate)), _filter(fa, predicate))
+} = <A>(predicate: Predicate<A>) => (fa: Option<A>) =>
+  separated(_filter(fa, not(predicate)), _filter(fa, predicate)) as Separated<Option<never>, Option<A>>
 
 /**
  * @category instance operations

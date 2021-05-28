@@ -51,6 +51,7 @@ import { Predicate } from './Predicate'
 import { ReadonlyNonEmptyArray } from './ReadonlyNonEmptyArray'
 import { Refinement } from './Refinement'
 import { Semigroup } from './Semigroup'
+import { Separated } from './Separated'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -512,7 +513,8 @@ export function getFilterable<E>(M: Monoid<E>): Filterable2C<URI, E> {
     separate: C.separate,
     filter: <A>(fa: IOEither<E, A>, predicate: Predicate<A>) => pipe(fa, filter(predicate)),
     filterMap: (fa, f) => pipe(fa, filterMap(f)),
-    partition: <A>(fa: IOEither<E, A>, predicate: Predicate<A>) => pipe(fa, partition(predicate)),
+    partition: <A>(fa: IOEither<E, A>, predicate: Predicate<A>) =>
+      pipe(fa, partition(predicate)) as Separated<IOEither<E, never>, IOEither<E, A>>,
     partitionMap: (fa, f) => pipe(fa, partitionMap(f))
   }
 }
@@ -784,7 +786,7 @@ export const chainEitherKW: <E2, A, B>(
  * @since 2.0.0
  */
 export const fromPredicate: {
-  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (a: A) => IOEither<E, B>
+  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (a: A) => IOEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <B extends A>(b: B) => IOEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (a: A) => IOEither<E, A>
 } =
@@ -796,7 +798,9 @@ export const fromPredicate: {
  * @since 2.0.0
  */
 export const filterOrElse: {
-  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (ma: IOEither<E, A>) => IOEither<E, B>
+  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (
+    ma: IOEither<E, A>
+  ) => IOEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <B extends A>(mb: IOEither<E, B>) => IOEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (ma: IOEither<E, A>) => IOEither<E, A>
 } =
@@ -810,7 +814,7 @@ export const filterOrElse: {
  * @since 2.9.0
  */
 export const filterOrElseW: {
-  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: A) => E2): <E1>(
+  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E2): <E1>(
     ma: IOEither<E1, A>
   ) => IOEither<E1 | E2, B>
   <A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2): <E1, B extends A>(

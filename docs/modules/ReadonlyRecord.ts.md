@@ -164,7 +164,7 @@ Added in v2.5.0
 export declare const partition: {
   <A, B extends A>(refinement: Refinement<A, B>): (
     fa: Readonly<Record<string, A>>
-  ) => Separated<Readonly<Record<string, A>>, Readonly<Record<string, B>>>
+  ) => Separated<Readonly<Record<string, Exclude<A, B>>>, Readonly<Record<string, B>>>
   <A>(predicate: Predicate<A>): <B extends A>(
     fb: Readonly<Record<string, B>>
   ) => Separated<Readonly<Record<string, B>>, Readonly<Record<string, B>>>
@@ -1016,7 +1016,7 @@ Added in v2.5.0
 ```ts
 export declare function partitionWithIndex<K extends string, A, B extends A>(
   refinementWithIndex: RefinementWithIndex<K, A, B>
-): (fa: ReadonlyRecord<K, A>) => Separated<ReadonlyRecord<string, A>, ReadonlyRecord<string, B>>
+): (fa: ReadonlyRecord<K, A>) => Separated<ReadonlyRecord<string, Exclude<A, B>>, ReadonlyRecord<string, B>>
 export declare function partitionWithIndex<K extends string, A>(
   predicateWithIndex: PredicateWithIndex<K, A>
 ): <B extends A>(fb: ReadonlyRecord<K, B>) => Separated<ReadonlyRecord<string, B>, ReadonlyRecord<string, B>>

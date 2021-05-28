@@ -235,12 +235,12 @@ export const getFilterable = <E>(M: Monoid<E>): Filterable2C<URI, E> => {
   const filter = <A>(ma: Either<E, A>, predicate: Predicate<A>): Either<E, A> =>
     isLeft(ma) ? ma : predicate(ma.right) ? ma : empty
 
-  const partition = <A>(ma: Either<E, A>, p: Predicate<A>): Separated<Either<E, A>, Either<E, A>> => {
+  const partition = <A>(ma: Either<E, A>, p: Predicate<A>) => {
     return isLeft(ma)
       ? separated(ma, ma)
       : p(ma.right)
       ? separated(empty, right(ma.right))
-      : separated(right(ma.right), empty)
+      : (separated(right(ma.right), empty) as Separated<Either<E, never>, Either<E, A>>)
   }
 
   return {
@@ -1066,7 +1066,7 @@ export const filterOrElse =
  * @since 2.9.0
  */
 export const filterOrElseW: {
-  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: A) => E2): <E1>(
+  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E2): <E1>(
     ma: Either<E1, A>
   ) => Either<E1 | E2, B>
   <A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2): <E1, B extends A>(mb: Either<E1, B>) => Either<E1 | E2, B>

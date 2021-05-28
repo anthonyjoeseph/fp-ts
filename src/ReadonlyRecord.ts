@@ -617,7 +617,7 @@ export function partitionMapWithIndex<A, B, C>(
  */
 export function partitionWithIndex<K extends string, A, B extends A>(
   refinementWithIndex: RefinementWithIndex<K, A, B>
-): (fa: ReadonlyRecord<K, A>) => Separated<ReadonlyRecord<string, A>, ReadonlyRecord<string, B>>
+): (fa: ReadonlyRecord<K, A>) => Separated<ReadonlyRecord<string, Exclude<A, B>>, ReadonlyRecord<string, B>>
 export function partitionWithIndex<K extends string, A>(
   predicateWithIndex: PredicateWithIndex<K, A>
 ): <B extends A>(fb: ReadonlyRecord<K, B>) => Separated<ReadonlyRecord<string, B>, ReadonlyRecord<string, B>>
@@ -1083,17 +1083,17 @@ export const filterMap: <A, B>(
 export const partition: {
   <A, B extends A>(refinement: Refinement<A, B>): (
     fa: ReadonlyRecord<string, A>
-  ) => Separated<ReadonlyRecord<string, A>, ReadonlyRecord<string, B>>
+  ) => Separated<ReadonlyRecord<string, Exclude<A, B>>, ReadonlyRecord<string, B>>
   <A>(predicate: Predicate<A>): <B extends A>(
     fb: ReadonlyRecord<string, B>
   ) => Separated<ReadonlyRecord<string, B>, ReadonlyRecord<string, B>>
   <A>(predicate: Predicate<A>): (
     fa: ReadonlyRecord<string, A>
   ) => Separated<ReadonlyRecord<string, A>, ReadonlyRecord<string, A>>
-} = <A>(
-  predicate: Predicate<A>
-): ((fa: ReadonlyRecord<string, A>) => Separated<ReadonlyRecord<string, A>, ReadonlyRecord<string, A>>) =>
-  partitionWithIndex((_, a) => predicate(a))
+} = <A>(predicate: Predicate<A>) =>
+  partitionWithIndex((_, a) => predicate(a)) as (
+    fa: ReadonlyRecord<string, A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>
 
 /**
  * @category Filterable
@@ -1381,7 +1381,10 @@ export const Filterable: Filterable1<URI> = {
   separate,
   filter: _filter,
   filterMap: _filterMap,
-  partition: _partition,
+  partition: _partition as <A>(
+    fa: ReadonlyRecord<string, A>,
+    predicate: Predicate<A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>,
   partitionMap: _partitionMap
 }
 
@@ -1397,12 +1400,18 @@ export const FilterableWithIndex: FilterableWithIndex1<URI, string> = {
   separate,
   filter: _filter,
   filterMap: _filterMap,
-  partition: _partition,
+  partition: _partition as <A>(
+    fa: ReadonlyRecord<string, A>,
+    predicate: Predicate<A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>,
   partitionMap: _partitionMap,
   filterMapWithIndex: _filterMapWithIndex,
   filterWithIndex: _filterWithIndex,
   partitionMapWithIndex: _partitionMapWithIndex,
-  partitionWithIndex: _partitionWithIndex
+  partitionWithIndex: _partitionWithIndex as <A>(
+    fa: Readonly<Record<string, A>>,
+    predicateWithIndex: PredicateWithIndex<string, A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>
 }
 
 /**
@@ -1456,7 +1465,10 @@ export const getWitherable = (O: Ord<string>): Witherable1<URI> => {
     separate,
     filter: _filter,
     filterMap: _filterMap,
-    partition: _partition,
+    partition: _partition as <A>(
+      fa: ReadonlyRecord<string, A>,
+      predicate: Predicate<A>
+    ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>,
     partitionMap: _partitionMap,
     wither: witherDefault(T, Compactable),
     wilt: wiltDefault(T, Compactable)
@@ -1600,7 +1612,10 @@ export const Witherable: Witherable1<URI> = {
   separate,
   filter: _filter,
   filterMap: _filterMap,
-  partition: _partition,
+  partition: _partition as <A>(
+    fa: ReadonlyRecord<string, A>,
+    predicate: Predicate<A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>,
   partitionMap: _partitionMap,
   wither: _wither,
   wilt: _wilt
@@ -1649,7 +1664,10 @@ export const readonlyRecord: FunctorWithIndex1<URI, string> &
   separate,
   filter: _filter,
   filterMap: _filterMap,
-  partition: _partition,
+  partition: _partition as <A>(
+    fa: ReadonlyRecord<string, A>,
+    predicate: Predicate<A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>,
   partitionMap: _partitionMap,
   mapWithIndex: _mapWithIndex,
   reduceWithIndex: _reduceWithIndex(S.Ord),
@@ -1658,7 +1676,10 @@ export const readonlyRecord: FunctorWithIndex1<URI, string> &
   filterMapWithIndex: _filterMapWithIndex,
   filterWithIndex: _filterWithIndex,
   partitionMapWithIndex: _partitionMapWithIndex,
-  partitionWithIndex: _partitionWithIndex,
+  partitionWithIndex: _partitionWithIndex as <A>(
+    fa: Readonly<Record<string, A>>,
+    predicateWithIndex: PredicateWithIndex<string, A>
+  ) => Separated<ReadonlyRecord<string, never>, ReadonlyRecord<string, A>>,
   traverseWithIndex: _traverseWithIndex(S.Ord),
   wither: _wither,
   wilt: _wilt

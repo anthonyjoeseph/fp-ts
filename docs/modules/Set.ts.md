@@ -372,7 +372,7 @@ Added in v2.10.0
 ```ts
 export declare function partition<A, B extends A>(
   refinement: Refinement<A, B>
-): (set: Set<A>) => Separated<Set<A>, Set<B>>
+): (set: Set<A>) => Separated<Set<Exclude<A, B>>, Set<B>>
 export declare function partition<A>(predicate: Predicate<A>): <B extends A>(set: Set<B>) => Separated<Set<B>, Set<B>>
 export declare function partition<A>(predicate: Predicate<A>): (set: Set<A>) => Separated<Set<A>, Set<A>>
 ```

@@ -1282,14 +1282,14 @@ const _filter: Filterable1<URI>['filter'] = <A>(fa: Array<A>, predicate: Predica
 const _filterMap: Filterable1<URI>['filterMap'] = (fa, f) => pipe(fa, filterMap(f))
 /* istanbul ignore next */
 const _partition: Filterable1<URI>['partition'] = <A>(fa: Array<A>, predicate: Predicate<A>) =>
-  pipe(fa, partition(predicate))
+  pipe(fa, partition(predicate)) as Separated<Array<never>, Array<A>>
 /* istanbul ignore next */
 const _partitionMap: Filterable1<URI>['partitionMap'] = (fa, f) => pipe(fa, partitionMap(f))
 /* istanbul ignore next */
 const _partitionWithIndex: FilterableWithIndex1<URI, number>['partitionWithIndex'] = <A>(
   fa: Array<A>,
   predicateWithIndex: (i: number, a: A) => boolean
-) => pipe(fa, partitionWithIndex(predicateWithIndex))
+) => pipe(fa, partitionWithIndex(predicateWithIndex)) as Separated<Array<never>, Array<A>>
 /* istanbul ignore next */
 const _partitionMapWithIndex: FilterableWithIndex1<URI, number>['partitionMapWithIndex'] = <A, B, C>(
   fa: Array<A>,
@@ -1469,11 +1469,11 @@ export const filter: {
  * @since 2.0.0
  */
 export const partition: {
-  <A, B extends A>(refinement: Refinement<A, B>): (as: Array<A>) => Separated<Array<A>, Array<B>>
+  <A, B extends A>(refinement: Refinement<A, B>): (as: Array<A>) => Separated<Array<Exclude<A, B>>, Array<B>>
   <A>(predicate: Predicate<A>): <B extends A>(bs: Array<B>) => Separated<Array<B>, Array<B>>
   <A>(predicate: Predicate<A>): (as: Array<A>) => Separated<Array<A>, Array<A>>
-} = <A>(predicate: Predicate<A>): ((as: Array<A>) => Separated<Array<A>, Array<A>>) =>
-  partitionWithIndex((_, a) => predicate(a))
+} = <A>(predicate: Predicate<A>) =>
+  partitionWithIndex((_, a) => predicate(a)) as (as: Array<A>) => Separated<Array<never>, Array<never>>
 
 /**
  * @category FilterableWithIndex
@@ -1482,10 +1482,10 @@ export const partition: {
 export const partitionWithIndex: {
   <A, B extends A>(refinementWithIndex: RefinementWithIndex<number, A, B>): (
     as: Array<A>
-  ) => Separated<Array<A>, Array<B>>
+  ) => Separated<Array<Exclude<A, B>>, Array<B>>
   <A>(predicateWithIndex: PredicateWithIndex<number, A>): <B extends A>(bs: Array<B>) => Separated<Array<B>, Array<B>>
   <A>(predicateWithIndex: PredicateWithIndex<number, A>): (as: Array<A>) => Separated<Array<A>, Array<A>>
-} = <A>(predicateWithIndex: PredicateWithIndex<number, A>) => (as: Array<A>): Separated<Array<A>, Array<A>> => {
+} = <A>(predicateWithIndex: PredicateWithIndex<number, A>) => (as: Array<A>): Separated<Array<never>, Array<A>> => {
   const left: Array<A> = []
   const right: Array<A> = []
   for (let i = 0; i < as.length; i++) {
@@ -1496,7 +1496,7 @@ export const partitionWithIndex: {
       left.push(b)
     }
   }
-  return separated(left, right)
+  return separated(left as Array<never>, right)
 }
 
 /**

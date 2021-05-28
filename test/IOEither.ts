@@ -171,7 +171,7 @@ describe('IOEither', () => {
           _.right(7),
           _.filterOrElse(
             (n) => n > 10,
-            (n) => `invalid ${n}`
+            (n: number) => `invalid ${n}`
           )
         )(),
         E.left('invalid 7')

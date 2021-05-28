@@ -76,7 +76,7 @@ pipe(
 pipe(prsns, _.partition(isString))
 // $ExpectType Separated<ReadonlySet<number>, ReadonlySet<number>>
 pipe(prns, _.partition(predicate))
-// $ExpectType Separated<ReadonlySet<string | number>, ReadonlySet<number>>
+// $ExpectType Separated<ReadonlySet<string>, ReadonlySet<number>>
 pipe(prsns, _.partition(isNumber))
 // $ExpectType Separated<ReadonlySet<number>, ReadonlySet<number>>
 pipe(
@@ -95,5 +95,5 @@ pipe(
 // $ExpectType Either<ReadonlySet<number>, ReadonlySet<number>>
 pipe(
   me,
-  E.fromPredicate(_.isEmpty, (as) => as)
+  E.fromPredicate(_.isEmpty, (as: ReadonlySet<number>) => as)
 )

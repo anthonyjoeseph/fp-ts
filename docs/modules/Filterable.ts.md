@@ -142,7 +142,7 @@ export declare function partition<F extends URIS2, G extends URIS2, E>(
 ): {
   <A, B extends A>(refinement: Refinement<A, B>): <R>(
     fga: Kind2<F, R, Kind2<G, E, A>>
-  ) => Separated<Kind2<F, R, Kind2<G, E, A>>, Kind2<F, R, Kind2<G, E, B>>>
+  ) => Separated<Kind2<F, R, Kind2<G, E, Exclude<A, B>>>, Kind2<F, R, Kind2<G, E, B>>>
   <A>(predicate: Predicate<A>): <R, B extends A>(
     fgb: Kind2<F, R, Kind2<G, E, B>>
   ) => Separated<Kind2<F, R, Kind2<G, E, B>>, Kind2<F, R, Kind2<G, E, B>>>
@@ -156,7 +156,7 @@ export declare function partition<F extends URIS, G extends URIS2, E>(
 ): {
   <A, B extends A>(refinement: Refinement<A, B>): (
     fga: Kind<F, Kind2<G, E, A>>
-  ) => Separated<Kind<F, Kind2<G, E, A>>, Kind<F, Kind2<G, E, B>>>
+  ) => Separated<Kind<F, Kind2<G, E, Exclude<A, B>>>, Kind<F, Kind2<G, E, B>>>
   <A>(predicate: Predicate<A>): <B extends A>(
     fgb: Kind<F, Kind2<G, E, B>>
   ) => Separated<Kind<F, Kind2<G, E, B>>, Kind<F, Kind2<G, E, B>>>
@@ -170,7 +170,7 @@ export declare function partition<F extends URIS, G extends URIS>(
 ): {
   <A, B extends A>(refinement: Refinement<A, B>): (
     fga: Kind<F, Kind<G, A>>
-  ) => Separated<Kind<F, Kind<G, A>>, Kind<F, Kind<G, B>>>
+  ) => Separated<Kind<F, Kind<G, Exclude<A, B>>>, Kind<F, Kind<G, B>>>
   <A>(predicate: Predicate<A>): <B extends A>(
     fgb: Kind<F, Kind<G, B>>
   ) => Separated<Kind<F, Kind<G, B>>, Kind<F, Kind<G, B>>>
@@ -182,7 +182,7 @@ export declare function partition<F, G>(
 ): {
   <A, B extends A>(refinement: Refinement<A, B>): (
     fga: HKT<F, HKT<G, A>>
-  ) => Separated<HKT<F, HKT<G, A>>, HKT<F, HKT<G, B>>>
+  ) => Separated<HKT<F, HKT<G, Exclude<A, B>>>, HKT<F, HKT<G, B>>>
   <A>(predicate: Predicate<A>): <B extends A>(fgb: HKT<F, HKT<G, B>>) => Separated<HKT<F, HKT<G, B>>, HKT<F, HKT<G, B>>>
   <A>(predicate: Predicate<A>): (fga: HKT<F, HKT<G, A>>) => Separated<HKT<F, HKT<G, A>>, HKT<F, HKT<G, A>>>
 }
@@ -456,7 +456,7 @@ Added in v2.0.0
 
 ```ts
 export interface Partition<F> {
-  <A, B extends A>(fa: HKT<F, A>, refinement: Refinement<A, B>): Separated<HKT<F, A>, HKT<F, B>>
+  <A, B extends A>(fa: HKT<F, A>, refinement: Refinement<A, B>): Separated<HKT<F, Exclude<A, B>>, HKT<F, B>>
   <A>(fa: HKT<F, A>, predicate: Predicate<A>): Separated<HKT<F, A>, HKT<F, A>>
 }
 ```
@@ -469,7 +469,7 @@ Added in v2.0.0
 
 ```ts
 export interface Partition1<F extends URIS> {
-  <A, B extends A>(fa: Kind<F, A>, refinement: Refinement<A, B>): Separated<Kind<F, A>, Kind<F, B>>
+  <A, B extends A>(fa: Kind<F, A>, refinement: Refinement<A, B>): Separated<Kind<F, Exclude<A, B>>, Kind<F, B>>
   <A>(fa: Kind<F, A>, predicate: Predicate<A>): Separated<Kind<F, A>, Kind<F, A>>
 }
 ```
@@ -482,7 +482,10 @@ Added in v2.0.0
 
 ```ts
 export interface Partition2<F extends URIS2> {
-  <E, A, B extends A>(fa: Kind2<F, E, A>, refinement: Refinement<A, B>): Separated<Kind2<F, E, A>, Kind2<F, E, B>>
+  <E, A, B extends A>(fa: Kind2<F, E, A>, refinement: Refinement<A, B>): Separated<
+    Kind2<F, E, Exclude<A, B>>,
+    Kind2<F, E, B>
+  >
   <E, A>(fa: Kind2<F, E, A>, predicate: Predicate<A>): Separated<Kind2<F, E, A>, Kind2<F, E, A>>
 }
 ```
@@ -495,7 +498,10 @@ Added in v2.0.0
 
 ```ts
 export interface Partition2C<F extends URIS2, E> {
-  <A, B extends A>(fa: Kind2<F, E, A>, refinement: Refinement<A, B>): Separated<Kind2<F, E, A>, Kind2<F, E, B>>
+  <A, B extends A>(fa: Kind2<F, E, A>, refinement: Refinement<A, B>): Separated<
+    Kind2<F, E, Exclude<A, B>>,
+    Kind2<F, E, B>
+  >
   <A>(fa: Kind2<F, E, A>, predicate: Predicate<A>): Separated<Kind2<F, E, A>, Kind2<F, E, A>>
 }
 ```
@@ -509,7 +515,7 @@ Added in v2.0.0
 ```ts
 export interface Partition3<F extends URIS3> {
   <R, E, A, B extends A>(fa: Kind3<F, R, E, A>, refinement: Refinement<A, B>): Separated<
-    Kind3<F, R, E, A>,
+    Kind3<F, R, E, Exclude<A, B>>,
     Kind3<F, R, E, B>
   >
   <R, E, A>(fa: Kind3<F, R, E, A>, predicate: Predicate<A>): Separated<Kind3<F, R, E, A>, Kind3<F, R, E, A>>
@@ -525,7 +531,7 @@ Added in v2.0.0
 ```ts
 export interface Partition3C<F extends URIS3, E> {
   <R, A, B extends A>(fa: Kind3<F, R, E, A>, refinement: Refinement<A, B>): Separated<
-    Kind3<F, R, E, A>,
+    Kind3<F, R, E, Exclude<A, B>>,
     Kind3<F, R, E, B>
   >
   <R, A>(fa: Kind3<F, R, E, A>, predicate: Predicate<A>): Separated<Kind3<F, R, E, A>, Kind3<F, R, E, A>>
@@ -541,7 +547,7 @@ Added in v2.2.0
 ```ts
 export interface Partition4<F extends URIS4> {
   <S, R, E, A, B extends A>(fa: Kind4<F, S, R, E, A>, refinement: Refinement<A, B>): Separated<
-    Kind4<F, S, R, E, A>,
+    Kind4<F, S, R, E, Exclude<A, B>>,
     Kind4<F, S, R, E, B>
   >
   <S, R, E, A>(fa: Kind4<F, S, R, E, A>, predicate: Predicate<A>): Separated<Kind4<F, S, R, E, A>, Kind4<F, S, R, E, A>>

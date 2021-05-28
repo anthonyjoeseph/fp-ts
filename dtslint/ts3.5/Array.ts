@@ -209,7 +209,7 @@ pipe(
 pipe(prsns, _.partition(isString))
 // $ExpectType Separated<number[], number[]>
 pipe(prns, _.partition(predicate))
-// $ExpectType Separated<(string | number)[], number[]>
+// $ExpectType Separated<string[], number[]>
 pipe(prsns, _.partition(isNumber))
 // $ExpectType Separated<number[], number[]>
 pipe(
@@ -229,7 +229,7 @@ pipe(
 pipe(prsns, _.partitionWithIndex(isStringWithIndex))
 // $ExpectType Separated<number[], number[]>
 pipe(prns, _.partitionWithIndex(predicateWithIndex))
-// $ExpectType Separated<(string | number)[], number[]>
+// $ExpectType Separated<string[], number[]>
 pipe(prsns, _.partitionWithIndex(isNumberWithIndex))
 // $ExpectType Separated<number[], number[]>
 pipe(

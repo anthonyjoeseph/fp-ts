@@ -333,7 +333,7 @@ Added in v2.0.0
 
 ```ts
 export declare const partition: {
-  <A, B extends A>(refinement: Refinement<A, B>): (as: A[]) => Separated<A[], B[]>
+  <A, B extends A>(refinement: Refinement<A, B>): (as: A[]) => Separated<Exclude<A, B>[], B[]>
   <A>(predicate: Predicate<A>): <B extends A>(bs: B[]) => Separated<B[], B[]>
   <A>(predicate: Predicate<A>): (as: A[]) => Separated<A[], A[]>
 }
@@ -395,7 +395,7 @@ Added in v2.0.0
 
 ```ts
 export declare const partitionWithIndex: {
-  <A, B extends A>(refinementWithIndex: RefinementWithIndex<number, A, B>): (as: A[]) => Separated<A[], B[]>
+  <A, B extends A>(refinementWithIndex: RefinementWithIndex<number, A, B>): (as: A[]) => Separated<Exclude<A, B>[], B[]>
   <A>(predicateWithIndex: PredicateWithIndex<number, A>): <B extends A>(bs: B[]) => Separated<B[], B[]>
   <A>(predicateWithIndex: PredicateWithIndex<number, A>): (as: A[]) => Separated<A[], A[]>
 }

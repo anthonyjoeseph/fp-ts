@@ -415,7 +415,7 @@ export const partitionMapWithIndex: <K extends string, A, B, C>(
  */
 export function partitionWithIndex<K extends string, A, B extends A>(
   refinementWithIndex: RefinementWithIndex<K, A, B>
-): (fa: Record<K, A>) => Separated<Record<string, A>, Record<string, B>>
+): (fa: Record<K, A>) => Separated<Record<string, Exclude<A, B>>, Record<string, B>>
 export function partitionWithIndex<K extends string, A>(
   predicateWithIndex: PredicateWithIndex<K, A>
 ): <B extends A>(fb: Record<K, B>) => Separated<Record<string, B>, Record<string, B>>
@@ -612,13 +612,19 @@ const _foldMap = RR._foldMap
 const _reduceRight = RR._reduceRight
 const _filter = RR._filter
 const _filterMap = RR._filterMap
-const _partition = RR._partition
+const _partition = RR._partition as <A>(
+  fa: Record<string, A>,
+  predicate: Predicate<A>
+) => Separated<Record<string, never>, Record<string, A>>
 const _partitionMap = RR._partitionMap
 const _reduceWithIndex = RR._reduceWithIndex
 const _foldMapWithIndex = RR._foldMapWithIndex
 const _reduceRightWithIndex = RR._reduceRightWithIndex
 const _partitionMapWithIndex = RR._partitionMapWithIndex
-const _partitionWithIndex = RR._partitionWithIndex
+const _partitionWithIndex = RR._partitionWithIndex as <A>(
+  fa: Readonly<Record<string, A>>,
+  predicateWithIndex: PredicateWithIndex<string, A>
+) => Separated<Record<string, never>, Record<string, A>>
 const _filterMapWithIndex = RR._filterMapWithIndex
 const _filterWithIndex = RR._filterWithIndex
 const _traverse = RR._traverse
@@ -673,7 +679,7 @@ export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: Record<string, A>
 export const partition: {
   <A, B extends A>(refinement: Refinement<A, B>): (
     fa: Record<string, A>
-  ) => Separated<Record<string, A>, Record<string, B>>
+  ) => Separated<Record<string, Exclude<A, B>>, Record<string, B>>
   <A>(predicate: Predicate<A>): <B extends A>(fb: Record<string, B>) => Separated<Record<string, B>, Record<string, B>>
   <A>(predicate: Predicate<A>): (fa: Record<string, A>) => Separated<Record<string, A>, Record<string, A>>
 } = RR.partition

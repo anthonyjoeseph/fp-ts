@@ -393,7 +393,9 @@ export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fga: TaskOption<A>) =
  * @since 2.10.0
  */
 export const partition: {
-  <A, B extends A>(refinement: Refinement<A, B>): (fb: TaskOption<A>) => Separated<TaskOption<A>, TaskOption<B>>
+  <A, B extends A>(refinement: Refinement<A, B>): (
+    fb: TaskOption<A>
+  ) => Separated<TaskOption<Exclude<A, B>>, TaskOption<B>>
   <A>(predicate: Predicate<A>): <B extends A>(fb: TaskOption<B>) => Separated<TaskOption<B>, TaskOption<B>>
   <A>(predicate: Predicate<A>): (fa: TaskOption<A>) => Separated<TaskOption<A>, TaskOption<A>>
 } =
@@ -427,7 +429,7 @@ const _filter: Filterable1<URI>['filter'] = <A>(fa: TaskOption<A>, predicate: Pr
 const _filterMap: Filterable1<URI>['filterMap'] = (fa, f) => pipe(fa, filterMap(f))
 /* istanbul ignore next */
 const _partition: Filterable1<URI>['partition'] = <A>(fa: TaskOption<A>, predicate: Predicate<A>) =>
-  pipe(fa, partition(predicate))
+  pipe(fa, partition(predicate)) as Separated<TaskOption<never>, TaskOption<A>>
 /* istanbul ignore next */
 const _partitionMap: Filterable1<URI>['partitionMap'] = (fa, f) => pipe(fa, partitionMap(f))
 

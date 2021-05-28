@@ -6,6 +6,7 @@ import * as IO from '../src/IO'
 import * as N from '../src/number'
 import * as O from '../src/Option'
 import * as Ord from '../src/Ord'
+import { Predicate } from '../src/Predicate'
 import * as RA from '../src/ReadonlyArray'
 import * as _ from '../src/ReadonlyMap'
 import { Refinement } from '../src/Refinement'
@@ -133,14 +134,14 @@ describe('ReadonlyMap', () => {
 
     it('partition', () => {
       const empty = new Map<string, number>()
-      U.deepStrictEqual(pipe(empty, _.partition(p)), separated(empty, empty))
+      U.deepStrictEqual(pipe(empty, _.partition(p as Predicate<number>)), separated(empty, empty))
       U.deepStrictEqual(
         pipe(
           new Map<string, number>([
             ['a', 1],
             ['b', 3]
           ]),
-          _.partition(p)
+          _.partition(p as Predicate<number>)
         ),
         separated(
           new Map<string, number>([['a', 1]]),

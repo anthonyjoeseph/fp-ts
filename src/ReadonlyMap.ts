@@ -633,7 +633,8 @@ const _partitionMap: Filterable2<URI>['partitionMap'] = (fa, f) => _partitionMap
 const _filterWithIndex = <K, A>(fa: ReadonlyMap<K, A>, p: (k: K, a: A) => boolean) => pipe(fa, filterWithIndex(p))
 const _filterMapWithIndex = <K, A, B>(fa: ReadonlyMap<K, A>, f: (k: K, a: A) => Option<B>) =>
   pipe(fa, filterMapWithIndex(f))
-const _partitionWithIndex = <K, A>(fa: ReadonlyMap<K, A>, p: (k: K, a: A) => boolean) => pipe(fa, partitionWithIndex(p))
+const _partitionWithIndex = <K, A>(fa: ReadonlyMap<K, A>, p: (k: K, a: A) => boolean) =>
+  pipe(fa, partitionWithIndex(p)) as Separated<ReadonlyMap<K, never>, ReadonlyMap<K, A>>
 const _partitionMapWithIndex = <K, A, B, C>(fa: ReadonlyMap<K, A>, f: (k: K, a: A) => Either<B, C>) =>
   pipe(fa, partitionMapWithIndex(f))
 
@@ -701,12 +702,13 @@ export const mapWithIndex: <K, A, B>(f: (k: K, a: A) => B) => (fa: ReadonlyMap<K
 export const partition: {
   <A, B extends A>(refinement: Refinement<A, B>): <K>(
     fa: ReadonlyMap<K, A>
-  ) => Separated<ReadonlyMap<K, A>, ReadonlyMap<K, B>>
+  ) => Separated<ReadonlyMap<K, Exclude<A, B>>, ReadonlyMap<K, B>>
   <A>(predicate: Predicate<A>): <K, B extends A>(
     fb: ReadonlyMap<K, B>
   ) => Separated<ReadonlyMap<K, B>, ReadonlyMap<K, B>>
   <A>(predicate: Predicate<A>): <K>(fa: ReadonlyMap<K, A>) => Separated<ReadonlyMap<K, A>, ReadonlyMap<K, A>>
-} = <A>(predicate: Predicate<A>) => <K>(fa: ReadonlyMap<K, A>) => _partition(fa, predicate)
+} = <A>(predicate: Predicate<A>) => <K>(fa: ReadonlyMap<K, A>) =>
+  _partition(fa, predicate) as Separated<ReadonlyMap<K, never>, ReadonlyMap<K, A>>
 
 /**
  * @category Filterable

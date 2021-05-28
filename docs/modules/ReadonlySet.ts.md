@@ -443,7 +443,7 @@ Added in v2.5.0
 ```ts
 export declare function partition<A, B extends A>(
   refinement: Refinement<A, B>
-): (set: ReadonlySet<A>) => Separated<ReadonlySet<A>, ReadonlySet<B>>
+): (set: ReadonlySet<A>) => Separated<ReadonlySet<Exclude<A, B>>, ReadonlySet<B>>
 export declare function partition<A>(
   predicate: Predicate<A>
 ): <B extends A>(set: ReadonlySet<B>) => Separated<ReadonlySet<B>, ReadonlySet<B>>

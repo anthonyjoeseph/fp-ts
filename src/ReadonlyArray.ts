@@ -1378,12 +1378,12 @@ const _filter: Filterable1<URI>['filter'] = <A>(fa: ReadonlyArray<A>, predicate:
   pipe(fa, filter(predicate))
 const _filterMap: Filterable1<URI>['filterMap'] = (fa, f) => pipe(fa, filterMap(f))
 const _partition: Filterable1<URI>['partition'] = <A>(fa: ReadonlyArray<A>, predicate: Predicate<A>) =>
-  pipe(fa, partition(predicate))
+  pipe(fa, partition(predicate)) as Separated<ReadonlyArray<never>, ReadonlyArray<A>>
 const _partitionMap: Filterable1<URI>['partitionMap'] = (fa, f) => pipe(fa, partitionMap(f))
 const _partitionWithIndex: FilterableWithIndex1<URI, number>['partitionWithIndex'] = <A>(
   fa: ReadonlyArray<A>,
   predicateWithIndex: (i: number, a: A) => boolean
-) => pipe(fa, partitionWithIndex(predicateWithIndex))
+) => pipe(fa, partitionWithIndex(predicateWithIndex)) as Separated<ReadonlyArray<never>, ReadonlyArray<A>>
 const _partitionMapWithIndex: FilterableWithIndex1<URI, number>['partitionMapWithIndex'] = <A, B, C>(
   fa: ReadonlyArray<A>,
   f: (i: number, a: A) => Either<B, C>
@@ -1579,11 +1579,13 @@ export const compact: <A>(fa: ReadonlyArray<Option<A>>) => ReadonlyArray<A> =
 export const partition: {
   <A, B extends A>(refinement: Refinement<A, B>): (
     as: ReadonlyArray<A>
-  ) => Separated<ReadonlyArray<A>, ReadonlyArray<B>>
+  ) => Separated<ReadonlyArray<Exclude<A, B>>, ReadonlyArray<B>>
   <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => Separated<ReadonlyArray<B>, ReadonlyArray<B>>
   <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => Separated<ReadonlyArray<A>, ReadonlyArray<A>>
-} = <A>(predicate: Predicate<A>): ((as: ReadonlyArray<A>) => Separated<ReadonlyArray<A>, ReadonlyArray<A>>) =>
-  partitionWithIndex((_, a) => predicate(a))
+} = <A>(predicate: Predicate<A>) =>
+  partitionWithIndex((_, a) => predicate(a)) as (
+    as: ReadonlyArray<A>
+  ) => Separated<ReadonlyArray<never>, ReadonlyArray<A>>
 
 /**
  * @category FilterableWithIndex
@@ -1592,24 +1594,22 @@ export const partition: {
 export const partitionWithIndex: {
   <A, B extends A>(refinementWithIndex: RefinementWithIndex<number, A, B>): (
     as: ReadonlyArray<A>
-  ) => Separated<ReadonlyArray<A>, ReadonlyArray<B>>
+  ) => Separated<ReadonlyArray<Exclude<A, B>>, ReadonlyArray<B>>
   <A>(predicateWithIndex: PredicateWithIndex<number, A>): <B extends A>(
     bs: ReadonlyArray<B>
   ) => Separated<ReadonlyArray<B>, ReadonlyArray<B>>
   <A>(predicateWithIndex: PredicateWithIndex<number, A>): (
     as: ReadonlyArray<A>
   ) => Separated<ReadonlyArray<A>, ReadonlyArray<A>>
-} = <A>(predicateWithIndex: PredicateWithIndex<number, A>) => (
-  as: ReadonlyArray<A>
-): Separated<ReadonlyArray<A>, ReadonlyArray<A>> => {
-  const left: Array<A> = []
+} = <A>(predicateWithIndex: PredicateWithIndex<number, A>) => (as: ReadonlyArray<A>) => {
+  const left: Array<never> = []
   const right: Array<A> = []
   for (let i = 0; i < as.length; i++) {
     const a = as[i]
     if (predicateWithIndex(i, a)) {
       right.push(a)
     } else {
-      left.push(a)
+      left.push(a as never)
     }
   }
   return separated(left, right)

@@ -520,7 +520,9 @@ Added in v2.11.0
 
 ```ts
 export declare const filterOrElse: {
-  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (ma: TaskEither<E, A>) => TaskEither<E, B>
+  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (
+    ma: TaskEither<E, A>
+  ) => TaskEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <B extends A>(mb: TaskEither<E, B>) => TaskEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (ma: TaskEither<E, A>) => TaskEither<E, A>
 }
@@ -536,7 +538,7 @@ Less strict version of [`filterOrElse`](#filterorelse).
 
 ```ts
 export declare const filterOrElseW: {
-  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: A) => E2): <E1>(
+  <A, B extends A, E2>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E2): <E1>(
     ma: TaskEither<E1, A>
   ) => TaskEither<E2 | E1, B>
   <A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2): <E1, B extends A>(
@@ -750,7 +752,7 @@ Added in v2.0.0
 
 ```ts
 export declare const fromPredicate: {
-  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (a: A) => TaskEither<E, B>
+  <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (a: A) => TaskEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <B>(b: B) => TaskEither<E, B>
   <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (a: A) => TaskEither<E, A>
 }

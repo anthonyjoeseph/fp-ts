@@ -794,7 +794,7 @@ export interface PipeableFilterable<F> extends PipeableCompactable<F> {
   }
   readonly filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: HKT<F, A>) => HKT<F, B>
   readonly partition: {
-    <A, B extends A>(refinement: Refinement<A, B>): (fa: HKT<F, A>) => Separated<HKT<F, A>, HKT<F, B>>
+    <A, B extends A>(refinement: Refinement<A, B>): (fa: HKT<F, A>) => Separated<HKT<F, Exclude<A, B>>, HKT<F, B>>
     <A>(predicate: Predicate<A>): (fa: HKT<F, A>) => Separated<HKT<F, A>, HKT<F, A>>
   }
   readonly partitionMap: <A, B, C>(f: (a: A) => Either<B, C>) => (fa: HKT<F, A>) => Separated<HKT<F, B>, HKT<F, C>>
@@ -811,7 +811,7 @@ export interface PipeableFilterable1<F extends URIS> extends PipeableCompactable
   }
   readonly filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: Kind<F, A>) => Kind<F, B>
   readonly partition: {
-    <A, B extends A>(refinement: Refinement<A, B>): (fa: Kind<F, A>) => Separated<Kind<F, A>, Kind<F, B>>
+    <A, B extends A>(refinement: Refinement<A, B>): (fa: Kind<F, A>) => Separated<Kind<F, Exclude<A, B>>, Kind<F, B>>
     <A>(predicate: Predicate<A>): (fa: Kind<F, A>) => Separated<Kind<F, A>, Kind<F, A>>
   }
   readonly partitionMap: <A, B, C>(f: (a: A) => Either<B, C>) => (fa: Kind<F, A>) => Separated<Kind<F, B>, Kind<F, C>>
@@ -828,7 +828,9 @@ export interface PipeableFilterable2<F extends URIS2> extends PipeableCompactabl
   }
   readonly filterMap: <A, B>(f: (a: A) => Option<B>) => <E>(fa: Kind2<F, E, A>) => Kind2<F, E, B>
   readonly partition: {
-    <A, B extends A>(refinement: Refinement<A, B>): <E>(fa: Kind2<F, E, A>) => Separated<Kind2<F, E, A>, Kind2<F, E, B>>
+    <A, B extends A>(refinement: Refinement<A, B>): <E>(
+      fa: Kind2<F, E, A>
+    ) => Separated<Kind2<F, E, Exclude<A, B>>, Kind2<F, E, B>>
     <A>(predicate: Predicate<A>): <E>(fa: Kind2<F, E, A>) => Separated<Kind2<F, E, A>, Kind2<F, E, A>>
   }
   readonly partitionMap: <A, B, C>(
@@ -847,7 +849,9 @@ export interface PipeableFilterable2C<F extends URIS2, E> extends PipeableCompac
   }
   readonly filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: Kind2<F, E, A>) => Kind2<F, E, B>
   readonly partition: {
-    <A, B extends A>(refinement: Refinement<A, B>): (fa: Kind2<F, E, A>) => Separated<Kind2<F, E, A>, Kind2<F, E, B>>
+    <A, B extends A>(refinement: Refinement<A, B>): (
+      fa: Kind2<F, E, A>
+    ) => Separated<Kind2<F, E, Exclude<A, B>>, Kind2<F, E, B>>
     <A>(predicate: Predicate<A>): (fa: Kind2<F, E, A>) => Separated<Kind2<F, E, A>, Kind2<F, E, A>>
   }
   readonly partitionMap: <A, B, C>(
@@ -868,7 +872,7 @@ export interface PipeableFilterable3<F extends URIS3> extends PipeableCompactabl
   readonly partition: {
     <A, B extends A>(refinement: Refinement<A, B>): <R, E>(
       fa: Kind3<F, R, E, A>
-    ) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, B>>
+    ) => Separated<Kind3<F, R, E, Exclude<A, B>>, Kind3<F, R, E, B>>
     <A>(predicate: Predicate<A>): <R, E>(fa: Kind3<F, R, E, A>) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, A>>
   }
   readonly partitionMap: <A, B, C>(
@@ -889,7 +893,7 @@ export interface PipeableFilterable3C<F extends URIS3, E> extends PipeableCompac
   readonly partition: {
     <A, B extends A>(refinement: Refinement<A, B>): <R>(
       fa: Kind3<F, R, E, A>
-    ) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, B>>
+    ) => Separated<Kind3<F, R, E, Exclude<A, B>>, Kind3<F, R, E, B>>
     <A>(predicate: Predicate<A>): <R>(fa: Kind3<F, R, E, A>) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, A>>
   }
   readonly partitionMap: <A, B, C>(
@@ -910,7 +914,7 @@ export interface PipeableFilterable4<F extends URIS4> extends PipeableCompactabl
   readonly partition: {
     <A, B extends A>(refinement: Refinement<A, B>): <S, R, E>(
       fa: Kind4<F, S, R, E, A>
-    ) => Separated<Kind4<F, S, R, E, A>, Kind4<F, S, R, E, B>>
+    ) => Separated<Kind4<F, S, R, E, Exclude<A, B>>, Kind4<F, S, R, E, B>>
     <A>(predicate: Predicate<A>): <S, R, E>(
       fa: Kind4<F, S, R, E, A>
     ) => Separated<Kind4<F, S, R, E, A>, Kind4<F, S, R, E, A>>
@@ -933,7 +937,7 @@ export interface PipeableFilterableWithIndex<F, I> extends PipeableFilterable<F>
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): (
       fa: HKT<F, A>
-    ) => Separated<HKT<F, A>, HKT<F, B>>
+    ) => Separated<HKT<F, Exclude<A, B>>, HKT<F, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): (fa: HKT<F, A>) => Separated<HKT<F, A>, HKT<F, A>>
   }
   readonly partitionMapWithIndex: <A, B, C>(
@@ -954,7 +958,7 @@ export interface PipeableFilterableWithIndex1<F extends URIS, I> extends Pipeabl
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): (
       fa: Kind<F, A>
-    ) => Separated<Kind<F, A>, Kind<F, B>>
+    ) => Separated<Kind<F, Exclude<A, B>>, Kind<F, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): (fa: Kind<F, A>) => Separated<Kind<F, A>, Kind<F, A>>
   }
   readonly partitionMapWithIndex: <A, B, C>(
@@ -975,7 +979,7 @@ export interface PipeableFilterableWithIndex2<F extends URIS2, I> extends Pipeab
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): <E>(
       fa: Kind2<F, E, A>
-    ) => Separated<Kind2<F, E, A>, Kind2<F, E, B>>
+    ) => Separated<Kind2<F, E, Exclude<A, B>>, Kind2<F, E, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): <E>(
       fa: Kind2<F, E, A>
     ) => Separated<Kind2<F, E, A>, Kind2<F, E, A>>
@@ -998,7 +1002,7 @@ export interface PipeableFilterableWithIndex2C<F extends URIS2, I, E> extends Pi
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): (
       fa: Kind2<F, E, A>
-    ) => Separated<Kind2<F, E, A>, Kind2<F, E, B>>
+    ) => Separated<Kind2<F, E, Exclude<A, B>>, Kind2<F, E, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): (fa: Kind2<F, E, A>) => Separated<Kind2<F, E, A>, Kind2<F, E, A>>
   }
   readonly partitionMapWithIndex: <A, B, C>(
@@ -1023,7 +1027,7 @@ export interface PipeableFilterableWithIndex3<F extends URIS3, I> extends Pipeab
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): <R, E>(
       fa: Kind3<F, R, E, A>
-    ) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, B>>
+    ) => Separated<Kind3<F, R, E, Exclude<A, B>>, Kind3<F, R, E, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): <R, E>(
       fa: Kind3<F, R, E, A>
     ) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, A>>
@@ -1046,7 +1050,7 @@ export interface PipeableFilterableWithIndex3C<F extends URIS3, I, E> extends Pi
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): <R>(
       fa: Kind3<F, R, E, A>
-    ) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, B>>
+    ) => Separated<Kind3<F, R, E, Exclude<A, B>>, Kind3<F, R, E, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): <R>(
       fa: Kind3<F, R, E, A>
     ) => Separated<Kind3<F, R, E, A>, Kind3<F, R, E, A>>
@@ -1073,7 +1077,7 @@ export interface PipeableFilterableWithIndex4<F extends URIS4, I> extends Pipeab
   readonly partitionWithIndex: {
     <A, B extends A>(refinementWithIndex: RefinementWithIndex<I, A, B>): <S, R, E>(
       fa: Kind4<F, S, R, E, A>
-    ) => Separated<Kind4<F, S, R, E, A>, Kind4<F, S, R, E, B>>
+    ) => Separated<Kind4<F, S, R, E, Exclude<A, B>>, Kind4<F, S, R, E, B>>
     <A>(predicateWithIndex: PredicateWithIndex<I, A>): <S, R, E>(
       fa: Kind4<F, S, R, E, A>
     ) => Separated<Kind4<F, S, R, E, A>, Kind4<F, S, R, E, A>>
@@ -1190,11 +1194,11 @@ export interface PipeableMonadThrow<F> {
   readonly fromOption: <E>(onNone: Lazy<E>) => <A>(ma: Option<A>) => HKT<F, A>
   readonly fromEither: <E, A>(ma: Either<E, A>) => HKT<F, A>
   readonly fromPredicate: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (a: A) => HKT<F, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (a: A) => HKT<F, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (a: A) => HKT<F, A>
   }
   readonly filterOrElse: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (ma: HKT<F, A>) => HKT<F, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (ma: HKT<F, A>) => HKT<F, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (ma: HKT<F, A>) => HKT<F, A>
   }
 }
@@ -1207,11 +1211,11 @@ export interface PipeableMonadThrow1<F extends URIS> {
   readonly fromOption: <E>(onNone: Lazy<E>) => <A>(ma: Option<A>) => Kind<F, A>
   readonly fromEither: <E, A>(ma: Either<E, A>) => Kind<F, A>
   readonly fromPredicate: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (a: A) => Kind<F, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (a: A) => Kind<F, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (a: A) => Kind<F, A>
   }
   readonly filterOrElse: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (ma: Kind<F, A>) => Kind<F, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (ma: Kind<F, A>) => Kind<F, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (ma: Kind<F, A>) => Kind<F, A>
   }
 }
@@ -1224,11 +1228,13 @@ export interface PipeableMonadThrow2<F extends URIS2> {
   readonly fromOption: <E>(onNone: Lazy<E>) => <A>(ma: Option<A>) => Kind2<F, E, A>
   readonly fromEither: <E, A>(ma: Either<E, A>) => Kind2<F, E, A>
   readonly fromPredicate: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (a: A) => Kind2<F, E, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (a: A) => Kind2<F, E, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (a: A) => Kind2<F, E, A>
   }
   readonly filterOrElse: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (ma: Kind2<F, E, A>) => Kind2<F, E, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (
+      ma: Kind2<F, E, A>
+    ) => Kind2<F, E, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): (ma: Kind2<F, E, A>) => Kind2<F, E, A>
   }
 }
@@ -1241,11 +1247,13 @@ export interface PipeableMonadThrow2C<F extends URIS2, E> {
   readonly fromOption: (onNone: Lazy<E>) => <A>(ma: Option<A>) => Kind2<F, E, A>
   readonly fromEither: <A>(ma: Either<E, A>) => Kind2<F, E, A>
   readonly fromPredicate: {
-    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (a: A) => Kind2<F, E, B>
+    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (a: A) => Kind2<F, E, B>
     <A>(predicate: Predicate<A>, onFalse: (a: A) => E): (a: A) => Kind2<F, E, A>
   }
   readonly filterOrElse: {
-    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): (ma: Kind2<F, E, A>) => Kind2<F, E, B>
+    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): (
+      ma: Kind2<F, E, A>
+    ) => Kind2<F, E, B>
     <A>(predicate: Predicate<A>, onFalse: (a: A) => E): (ma: Kind2<F, E, A>) => Kind2<F, E, A>
   }
 }
@@ -1258,11 +1266,11 @@ export interface PipeableMonadThrow3<F extends URIS3> {
   readonly fromOption: <E>(onNone: Lazy<E>) => <R, A>(ma: Option<A>) => Kind3<F, R, E, A>
   readonly fromEither: <R, E, A>(ma: Either<E, A>) => Kind3<F, R, E, A>
   readonly fromPredicate: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <U>(a: A) => Kind3<F, U, E, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <U>(a: A) => Kind3<F, U, E, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R>(a: A) => Kind3<F, R, E, A>
   }
   readonly filterOrElse: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <R>(
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <R>(
       ma: Kind3<F, R, E, A>
     ) => Kind3<F, R, E, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R>(ma: Kind3<F, R, E, A>) => Kind3<F, R, E, A>
@@ -1277,11 +1285,11 @@ export interface PipeableMonadThrow3C<F extends URIS3, E> {
   readonly fromOption: (onNone: Lazy<E>) => <R, A>(ma: Option<A>) => Kind3<F, R, E, A>
   readonly fromEither: <R, A>(ma: Either<E, A>) => Kind3<F, R, E, A>
   readonly fromPredicate: {
-    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <U>(a: A) => Kind3<F, U, E, B>
+    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <U>(a: A) => Kind3<F, U, E, B>
     <A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R>(a: A) => Kind3<F, R, E, A>
   }
   readonly filterOrElse: {
-    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <R>(
+    <A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <R>(
       ma: Kind3<F, R, E, A>
     ) => Kind3<F, R, E, B>
     <A>(predicate: Predicate<A>, onFalse: (a: A) => E): <R>(ma: Kind3<F, R, E, A>) => Kind3<F, R, E, A>
@@ -1296,11 +1304,13 @@ export interface PipeableMonadThrow4<F extends URIS4> {
   readonly fromOption: <E>(onNone: Lazy<E>) => <S, R, A>(ma: Option<A>) => Kind4<F, S, R, E, A>
   readonly fromEither: <S, R, E, A>(ma: Either<E, A>) => Kind4<F, S, R, E, A>
   readonly fromPredicate: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <S, R>(a: A) => Kind4<F, S, R, E, B>
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <S, R>(
+      a: A
+    ) => Kind4<F, S, R, E, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <S, R>(a: A) => Kind4<F, S, R, E, A>
   }
   readonly filterOrElse: {
-    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: A) => E): <S, R>(
+    <E, A, B extends A>(refinement: Refinement<A, B>, onFalse: (a: Exclude<A, B>) => E): <S, R>(
       ma: Kind4<F, S, R, E, A>
     ) => Kind4<F, S, R, E, B>
     <E, A>(predicate: Predicate<A>, onFalse: (a: A) => E): <S, R>(ma: Kind4<F, S, R, E, A>) => Kind4<F, S, R, E, A>
@@ -1621,7 +1631,7 @@ export function pipeable<F, I>(I: { readonly URI: F } & I): Record<string, unkno
       I.filter(fa, predicate)
     const filterMap: PipeableFilterable<F>['filterMap'] = (f) => (fa) => I.filterMap(fa, f)
     const partition: PipeableFilterable<F>['partition'] = <A>(predicate: Predicate<A>) => (fa: HKT<F, A>) =>
-      I.partition(fa, predicate)
+      I.partition(fa, predicate) as Separated<HKT<F, never>, HKT<F, A>>
     const partitionMap: PipeableFilterable<F>['partitionMap'] = (f) => (fa) => I.partitionMap(fa, f)
     r.filter = filter
     r.filterMap = filterMap
@@ -1636,7 +1646,7 @@ export function pipeable<F, I>(I: { readonly URI: F } & I): Record<string, unkno
       I.filterMapWithIndex(fa, f)
     const partitionWithIndex: PipeableFilterableWithIndex<F, unknown>['partitionWithIndex'] = <A>(
       predicateWithIndex: PredicateWithIndex<unknown, A>
-    ) => (fa: HKT<F, A>) => I.partitionWithIndex(fa, predicateWithIndex)
+    ) => (fa: HKT<F, A>) => I.partitionWithIndex(fa, predicateWithIndex) as Separated<HKT<F, never>, HKT<F, A>>
     const partitionMapWithIndex: PipeableFilterableWithIndex<F, unknown>['partitionMapWithIndex'] = (f) => (fa) =>
       I.partitionMapWithIndex(fa, f)
     r.filterWithIndex = filterWithIndex
@@ -1659,12 +1669,12 @@ export function pipeable<F, I>(I: { readonly URI: F } & I): Record<string, unkno
       ma._tag === 'Left' ? I.throwError(ma.left) : I.of(ma.right)
     const fromPredicate: PipeableMonadThrow<F>['fromPredicate'] = <E, A>(
       predicate: Predicate<A>,
-      onFalse: (a: A) => E
-    ) => (a: A) => (predicate(a) ? I.of(a) : I.throwError(onFalse(a)))
+      onFalse: (a: never) => E
+    ) => (a: A) => (predicate(a) ? I.of(a) : I.throwError(onFalse(a as never)))
     const filterOrElse: PipeableMonadThrow<F>['filterOrElse'] = <E, A>(
       predicate: Predicate<A>,
-      onFalse: (a: A) => E
-    ) => (ma: HKT<F, A>) => I.chain(ma, (a) => (predicate(a) ? I.of(a) : I.throwError(onFalse(a))))
+      onFalse: (a: never) => E
+    ) => (ma: HKT<F, A>) => I.chain(ma, (a) => (predicate(a) ? I.of(a) : I.throwError(onFalse(a as never))))
     r.fromOption = fromOption
     r.fromEither = fromEither
     r.fromPredicate = fromPredicate

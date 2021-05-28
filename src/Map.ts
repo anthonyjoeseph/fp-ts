@@ -493,7 +493,8 @@ const _partition: Filterable2<URI>['partition'] = <K, A>(fa: Map<K, A>, predicat
 const _partitionMap: Filterable2<URI>['partitionMap'] = (fa, f) => _partitionMapWithIndex(fa, (_, a) => f(a))
 const _filterWithIndex = <K, A>(fa: Map<K, A>, p: (k: K, a: A) => boolean) => pipe(fa, filterWithIndex(p))
 const _filterMapWithIndex = <K, A, B>(fa: Map<K, A>, f: (k: K, a: A) => Option<B>) => pipe(fa, filterMapWithIndex(f))
-const _partitionWithIndex = <K, A>(fa: Map<K, A>, p: (k: K, a: A) => boolean) => pipe(fa, partitionWithIndex(p))
+const _partitionWithIndex = <K, A>(fa: Map<K, A>, p: (k: K, a: A) => boolean) =>
+  pipe(fa, partitionWithIndex(p)) as Separated<Map<K, never>, Map<K, A>>
 const _partitionMapWithIndex = <K, A, B, C>(fa: Map<K, A>, f: (k: K, a: A) => Either<B, C>) =>
   pipe(fa, partitionMapWithIndex(f))
 
@@ -557,10 +558,11 @@ export const mapWithIndex: <K, A, B>(f: (k: K, a: A) => B) => (fa: Map<K, A>) =>
  * @since 2.0.0
  */
 export const partition: {
-  <A, B extends A>(refinement: Refinement<A, B>): <K>(fa: Map<K, A>) => Separated<Map<K, A>, Map<K, B>>
+  <A, B extends A>(refinement: Refinement<A, B>): <K>(fa: Map<K, A>) => Separated<Map<K, Exclude<A, B>>, Map<K, B>>
   <A>(predicate: Predicate<A>): <K, B extends A>(fb: Map<K, B>) => Separated<Map<K, B>, Map<K, B>>
   <A>(predicate: Predicate<A>): <K>(fa: Map<K, A>) => Separated<Map<K, A>, Map<K, A>>
-} = <A>(predicate: Predicate<A>) => <K>(fa: Map<K, A>) => _partition(fa, predicate)
+} = <A>(predicate: Predicate<A>) => <K>(fa: Map<K, A>) =>
+  _partition(fa, predicate) as Separated<Map<K, never>, Map<K, A>>
 
 /**
  * @category Filterable

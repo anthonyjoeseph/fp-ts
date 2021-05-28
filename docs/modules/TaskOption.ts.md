@@ -204,7 +204,9 @@ Added in v2.10.0
 
 ```ts
 export declare const partition: {
-  <A, B extends A>(refinement: Refinement<A, B>): (fb: TaskOption<A>) => Separated<TaskOption<A>, TaskOption<B>>
+  <A, B extends A>(refinement: Refinement<A, B>): (
+    fb: TaskOption<A>
+  ) => Separated<TaskOption<Exclude<A, B>>, TaskOption<B>>
   <A>(predicate: Predicate<A>): <B extends A>(fb: TaskOption<B>) => Separated<TaskOption<B>, TaskOption<B>>
   <A>(predicate: Predicate<A>): (fa: TaskOption<A>) => Separated<TaskOption<A>, TaskOption<A>>
 }

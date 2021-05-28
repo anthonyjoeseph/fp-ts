@@ -76,7 +76,7 @@ pipe(
 pipe(prsns, _.partition(isString))
 // $ExpectType Separated<Set<number>, Set<number>>
 pipe(prns, _.partition(predicate))
-// $ExpectType Separated<Set<string | number>, Set<number>>
+// $ExpectType Separated<Set<string>, Set<number>>
 pipe(prsns, _.partition(isNumber))
 // $ExpectType Separated<Set<number>, Set<number>>
 pipe(
@@ -95,5 +95,5 @@ pipe(
 // $ExpectType Either<Set<number>, Set<number>>
 pipe(
   me,
-  E.fromPredicate(_.isEmpty, (as) => as)
+  E.fromPredicate(_.isEmpty, (as: Set<number>) => as)
 )

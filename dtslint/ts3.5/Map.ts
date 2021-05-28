@@ -97,7 +97,7 @@ pipe(
 pipe(prsns, _.partition(isString))
 // $ExpectType Separated<Map<string, number>, Map<string, number>>
 pipe(prns, _.partition(predicate))
-// $ExpectType Separated<Map<string, string | number>, Map<string, number>>
+// $ExpectType Separated<Map<string, string>, Map<string, number>>
 pipe(prsns, _.partition(isNumber))
 // $ExpectType Separated<Map<string, number>, Map<string, number>>
 pipe(
@@ -137,5 +137,5 @@ pipe(
 // $ExpectType Either<Map<string, number>, Map<string, number>>
 pipe(
   prns,
-  E.fromPredicate(_.isEmpty, (as) => as)
+  E.fromPredicate(_.isEmpty, (as: Map<string, number>) => as)
 )
